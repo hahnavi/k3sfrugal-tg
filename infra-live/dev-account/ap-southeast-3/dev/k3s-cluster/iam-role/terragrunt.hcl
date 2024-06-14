@@ -1,10 +1,10 @@
 include "root" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
 include "envcommon_k3s-cluster" {
-  path = "${dirname(find_in_parent_folders())}/_envcommon/k3s-cluster.hcl"
+  path   = "${dirname(find_in_parent_folders())}/_envcommon/k3s-cluster.hcl"
   expose = true
 }
 
@@ -13,7 +13,7 @@ terraform {
 }
 
 inputs = {
-  name = "${include.root.locals.prefix}-k3s-node"
+  name         = "${include.root.locals.prefix}-k3s-node"
   project_name = include.root.locals.project_name
-  env = include.root.locals.env
+  env          = include.root.locals.env
 }

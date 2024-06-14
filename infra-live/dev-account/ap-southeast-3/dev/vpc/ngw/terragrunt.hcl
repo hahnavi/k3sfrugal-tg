@@ -1,10 +1,10 @@
 include "root" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
 include "envcommon_vpc" {
-  path = "${dirname(find_in_parent_folders())}/_envcommon/vpc.hcl"
+  path   = "${dirname(find_in_parent_folders())}/_envcommon/vpc.hcl"
   expose = true
 }
 
@@ -29,6 +29,7 @@ dependency "sg_ngw" {
 
 inputs = {
   name                   = "${include.root.locals.prefix}-${basename(get_terragrunt_dir())}"
+  create_spot_instance   = true
   subnet_id              = dependency.vpc.outputs.public_subnets[0]
   private_ip             = "10.0.0.11"
   security_groups        = [dependency.sg_ngw.outputs.security_group_id]

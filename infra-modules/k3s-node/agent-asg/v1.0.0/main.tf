@@ -1,12 +1,12 @@
 data "aws_ami" "amazon_linux" {
   most_recent = true
-  owners = [ "amazon" ]
+  owners      = ["amazon"]
   filter {
-    name = "name"
+    name   = "name"
     values = ["al2023-ami-2023*"]
   }
   filter {
-    name = "architecture"
+    name   = "architecture"
     values = ["arm64"]
   }
 }
@@ -14,7 +14,7 @@ data "aws_ami" "amazon_linux" {
 resource "aws_launch_template" "this" {
   name = var.name
 
-  image_id      = data.aws_ami.amazon_linux.id
+  image_id               = data.aws_ami.amazon_linux.id
   instance_type          = var.instance_type
   vpc_security_group_ids = var.vpc_security_group_ids
 
@@ -46,13 +46,13 @@ EOF
 }
 
 resource "aws_autoscaling_group" "this" {
-  name = var.name
+  name                = var.name
   vpc_zone_identifier = var.vpc_zone_identifier
-  max_size                  = 3
-  min_size                  = 0
+  max_size            = 3
+  min_size            = 0
 
   launch_template {
-    id      = aws_launch_template.this.id
+    id = aws_launch_template.this.id
   }
 
   tag {

@@ -4,6 +4,24 @@ variable "name" {
   default     = null
 }
 
+variable "project_name" {
+  description = "Name of the project"
+  type        = string
+  default     = null
+}
+
+variable "env" {
+  description = "Name of the environment"
+  type        = string
+  default     = null
+}
+
+variable "bootsrapper" {
+  description = "k3s server bootsrapper"
+  type        = bool
+  default     = false
+}
+
 variable "instance_type" {
   description = "The type of instance to start"
   type        = string
@@ -52,14 +70,10 @@ variable "key_name" {
   default     = null
 }
 
-variable "k3s_token_ssm_parameter_name" {
-  description = "value of the ssm parameter name for the k3s token"
+variable "K3S_DATASTORE_ENDPOINT" {
+  description = "K3S Datastore endpoint"
   type        = string
-}
-
-variable "k3s_datastore_endpoint_ssm_parameter_name" {
-  description = "value of the ssm parameter name for the datastore endpoint"
-  type = string
+  default     = null
 }
 
 variable "tags" {

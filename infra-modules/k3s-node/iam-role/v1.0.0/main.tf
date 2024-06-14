@@ -24,7 +24,8 @@ resource "aws_iam_role" "this" {
           Effect = "Allow",
           Action = [
             "ssm:GetParameter",
-            "ssm:GetParameters"
+            "ssm:GetParameters",
+            "ssm:PutParameter"
           ],
           Resource = [
             "arn:aws:ssm:ap-southeast-3:${data.aws_caller_identity.current.account_id}:parameter/${var.project_name}/${var.env}/*"

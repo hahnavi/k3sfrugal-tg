@@ -1,8 +1,8 @@
 locals {
   envcommon_k3s-cluster = read_terragrunt_config(find_in_parent_folders("_envcommon/k3s-cluster.hcl"))
-  create_spot_instance = true
-  instance_type = "t4g.micro"
-  spot_max_price = "0.0019"
+  create_spot_instance  = true
+  instance_type         = "t4g.micro"
+  spot_max_price        = "0.0019"
 }
 
 terraform {

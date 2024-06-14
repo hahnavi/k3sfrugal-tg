@@ -1,10 +1,10 @@
 include "root" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
 include "envcommon_vpc" {
-  path = "${dirname(find_in_parent_folders())}/_envcommon/vpc.hcl"
+  path   = "${dirname(find_in_parent_folders())}/_envcommon/vpc.hcl"
   expose = true
 }
 
@@ -15,7 +15,7 @@ terraform {
 dependency "vpc" {
   config_path = "../../vpc"
   mock_outputs = {
-    vpc_id = "vpc-1234 (mock)"
+    vpc_id                      = "vpc-1234 (mock)"
     private_subnets_cidr_blocks = ["10.123.123.123/24"]
   }
 }
