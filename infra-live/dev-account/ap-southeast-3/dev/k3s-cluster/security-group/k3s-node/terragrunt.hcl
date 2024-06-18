@@ -16,7 +16,7 @@ dependency "vpc" {
   config_path = "${dirname(find_in_parent_folders("env.hcl"))}/vpc/vpc"
   mock_outputs = {
     vpc_id                      = "vpc-1234 (mock)"
-    private_subnets_cidr_blocks = ["10.123.123.123/24"]
+    private_subnets_cidr_blocks = ["10.123.123.0/24"]
   }
 }
 
@@ -52,6 +52,13 @@ inputs = {
       to_port                  = 443
       protocol                 = "tcp"
       description              = "Allow HTTPS from NGW"
+      source_security_group_id = dependency.sg_ngw.outputs.security_group_id
+    },
+    {
+      from_port                = 6443
+      to_port                  = 6443
+      protocol                 = "tcp"
+      description              = "Allow k3s API from NGW"
       source_security_group_id = dependency.sg_ngw.outputs.security_group_id
     },
   ],

@@ -5,7 +5,7 @@ output "public_ip" {
 
 output "private_ip" {
   description = "The private IP address assigned to the instance"
-  value       = aws_eip.this.private_ip
+  value       = aws_instance.this.private_ip
 }
 
 output "instance_id" {

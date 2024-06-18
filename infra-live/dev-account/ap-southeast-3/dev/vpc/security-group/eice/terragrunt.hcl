@@ -16,8 +16,8 @@ dependency "vpc" {
   config_path = "../../vpc"
   mock_outputs = {
     vpc_id                      = "vpc-1234 (mock)"
-    private_subnets_cidr_blocks = ["10.123.123.123/24"]
-    public_subnets_cidr_blocks  = ["10.231.231.231/24"]
+    private_subnets_cidr_blocks = ["10.123.123.0/24"]
+    public_subnets_cidr_blocks  = ["10.231.231.0/24"]
   }
 }
 

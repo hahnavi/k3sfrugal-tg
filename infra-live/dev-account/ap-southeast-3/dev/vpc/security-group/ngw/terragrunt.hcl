@@ -16,14 +16,7 @@ dependency "vpc" {
   config_path = "../../vpc"
   mock_outputs = {
     vpc_id                      = "vpc-1234 (mock)"
-    private_subnets_cidr_blocks = ["10.123.123.123/24"]
-  }
-}
-
-dependency "sg_eice" {
-  config_path = "../eice"
-  mock_outputs = {
-    security_group_id = "sg-1234 (mock)"
+    private_subnets_cidr_blocks = ["10.123.123.0/24"]
   }
 }
 
@@ -51,15 +44,6 @@ inputs = {
       protocol    = "-1"
       description = "All traffic from private subnet"
       cidr_blocks = dependency.vpc.outputs.private_subnets_cidr_blocks[0]
-    },
-  ],
-  ingress_with_source_security_group_id = [
-    {
-      from_port                = 22
-      to_port                  = 22
-      protocol                 = "tcp"
-      description              = "Allow SSH from EICE"
-      source_security_group_id = dependency.sg_eice.outputs.security_group_id
     },
   ],
   egress_with_cidr_blocks = [

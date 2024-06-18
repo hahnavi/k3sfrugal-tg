@@ -31,7 +31,6 @@ inputs = {
   name                   = "${include.root.locals.prefix}-${basename(get_terragrunt_dir())}"
   create_spot_instance   = true
   subnet_id              = dependency.vpc.outputs.public_subnets[0]
-  private_ip             = "10.0.0.11"
   security_groups        = [dependency.sg_ngw.outputs.security_group_id]
   private_route_table_id = dependency.vpc.outputs.private_route_table_ids[0]
 }

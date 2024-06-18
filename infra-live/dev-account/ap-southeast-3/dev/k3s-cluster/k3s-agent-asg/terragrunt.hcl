@@ -19,6 +19,13 @@ dependency "vpc" {
   }
 }
 
+dependency "ngw" {
+  config_path = "${dirname(find_in_parent_folders("env.hcl"))}/vpc/ngw"
+  mock_outputs = {
+    private_ip = "10.123.123.123"
+  }
+}
+
 dependency "sg_k3s-node" {
   config_path = "${dirname(find_in_parent_folders("env.hcl"))}/k3s-cluster/security-group/k3s-node"
   mock_outputs = {
@@ -41,6 +48,6 @@ inputs = {
   vpc_zone_identifier          = dependency.vpc.outputs.private_subnets
   vpc_security_group_ids       = [dependency.sg_k3s-node.outputs.security_group_id]
   iam_instance_profile         = dependency.iam-role.outputs.instance_profile
-  k3s_token_ssm_parameter_name = "${include.root.locals.project_name}/${include.root.locals.env}/k3s/token"
-  k3s_server_url               = "https://10.0.1.11:6443"
+  k3s_token_ssm_parameter_name = "/${include.root.locals.project_name}/${include.root.locals.env}/k3s/token"
+  k3s_server_url               = "https://${dependency.ngw.outputs.private_ip}:16443"
 }
