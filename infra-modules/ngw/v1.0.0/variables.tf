@@ -13,7 +13,7 @@ variable "subnet_id" {
 variable "private_ip" {
   description = "A list of private IPs to associate with the ENI"
   type        = string
-  default     = null
+  default     = "10.0.0.11"
 }
 
 variable "security_groups" {
@@ -84,6 +84,68 @@ systemctl enable iptables --now
 iptables -t nat -A POSTROUTING -o ens5 -j MASQUERADE
 iptables -F FORWARD
 iptables save
+
+HAPROXY_CONFIG_FILE=/etc/haproxy/haproxy.cfg
+line_number=$(grep -n "^frontend main" "$HAPROXY_CONFIG_FILE" | cut -d: -f1 | head -n 1)
+if [[ -n $line_number ]]; then
+  start_line=$((line_number - 3))
+  if (( start_line < 1 )); then
+    start_line=1
+  fi
+
+  sed -i "$start_line,\$d" "$HAPROXY_CONFIG_FILE"
+fi
+
+cat <<EOL > /etc/haproxy/conf.d/k3s-server.cfg
+frontend k3s-frontend
+    bind 10.0.0.11:16443
+    mode tcp
+    option tcplog
+    default_backend k3s-backend
+
+backend k3s-backend
+    mode tcp
+    option tcp-check
+    balance roundrobin
+    default-server inter 10s downinter 5s
+    server server-1 10.0.1.11:6443 check
+    server server-2 10.0.1.12:6443 check
+EOL
+
+cat <<EOL > /etc/haproxy/conf.d/k3s-lb-http.cfg
+frontend k3s-lb-http-frontend
+    bind *:80
+    mode tcp
+    option tcplog
+    default_backend k3s-lb-http-backend
+
+backend k3s-lb-http-backend
+    mode tcp
+    option tcp-check
+    balance roundrobin
+    default-server inter 10s downinter 5s
+    server server-1 10.0.1.11:80 check
+    server server-2 10.0.1.12:80 check
+EOL
+
+cat <<EOL > /etc/haproxy/conf.d/k3s-lb-https.cfg
+frontend k3s-lb-https-frontend
+    bind *:443
+    mode tcp
+    option tcplog
+    default_backend k3s-lb-https-backend
+
+backend k3s-lb-https-backend
+    mode tcp
+    option tcp-check
+    balance roundrobin
+    default-server inter 10s downinter 5s
+    server server-1 10.0.1.11:443 check
+    server server-2 10.0.1.12:443 check
+EOL
+
+systemctl enable haproxy --now
+
 EOF
 }
 

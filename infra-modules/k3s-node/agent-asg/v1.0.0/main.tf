@@ -17,6 +17,7 @@ resource "aws_launch_template" "this" {
   image_id               = data.aws_ami.amazon_linux.id
   instance_type          = var.instance_type
   vpc_security_group_ids = var.vpc_security_group_ids
+  update_default_version = true
 
   dynamic "instance_market_options" {
     for_each = var.create_spot_instance ? [1] : []
